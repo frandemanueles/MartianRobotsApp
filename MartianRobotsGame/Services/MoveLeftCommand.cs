@@ -8,17 +8,17 @@ namespace MartianRobotsGame.Services
         {
             switch (position.Orientation)
             {
-                case Orientation.North:
-                    position.Orientation = Orientation.West;
+                case Orientation.N:
+                    position.Orientation = Orientation.W;
                     break;
-                case Orientation.East:
-                    position.Orientation = Orientation.North;
+                case Orientation.E:
+                    position.Orientation = Orientation.N;
                     break;
-                case Orientation.South:
-                    position.Orientation = Orientation.East;
+                case Orientation.S:
+                    position.Orientation = Orientation.E;
                     break;
-                case Orientation.West:
-                    position.Orientation = Orientation.South;
+                case Orientation.W:
+                    position.Orientation = Orientation.S;
                     break;
             }
             return position;

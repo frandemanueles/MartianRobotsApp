@@ -10,16 +10,17 @@
     public class FinalPosition
     {
         public bool IsLost { get; set; }
-        public Position LastPosition { get; set; }
+        public Position Position { get; set; }
 
-        public bool IsRobotLoss(MarsGrid marsGrid, Position position)
+        public FinalPosition(Position position)
         {
-            return position.PositionX >= marsGrid.PositionX || position.PositionX >= marsGrid.PositionY;
+            this.Position = position;
+            this.IsLost = false;
         }
-
+        
         public override string ToString()
         {
-            return $"{LastPosition.Orientation} {LastPosition.PositionX} {LastPosition.PositionY}  {(this.IsLost ? "LOSS" : string.Empty)}";
+            return $"{Position.Orientation} {Position.PositionX} {Position.PositionY}  {(this.IsLost ? "LOST" : string.Empty)}";
         }
     }
 }

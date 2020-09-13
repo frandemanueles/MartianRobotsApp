@@ -1,6 +1,6 @@
 ﻿using MartianRobotsGame.Models;
 
-namespace MartianRobotsGame.    
+namespace MartianRobotsGame.Services
 {
     public interface IMoveCommand
     {

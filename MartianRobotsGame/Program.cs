@@ -1,4 +1,5 @@
-﻿using MartianRobotsGame.Services;
+﻿using MartianRobotsGame.Models;
+using MartianRobotsGame.Services;
 using System;
 
 namespace MartianRobotsGame
@@ -18,7 +19,7 @@ namespace MartianRobotsGame
             Console.WriteLine("Type a number with the maximum Y coordinate");
             string maxCoordinateY = Console.ReadLine();
 
-            var marsBoardService = new MarsBoardService();
+            var marsGrid = new MarsGrid(int.Parse(maxCoordinateX), int.Parse(maxCoordinateY));
 
             Console.WriteLine("Type coord");
 

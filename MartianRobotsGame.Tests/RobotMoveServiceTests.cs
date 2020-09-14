@@ -7,59 +7,93 @@ namespace MartianRobotsGame.Tests
 {
     public class RobotMoveServiceTests
     {
-        //public static IEnumerable<object[]> BBChargesCalculations
-        //{
-        //    get
-        //    {
-        //        yield return new object[] { BroadbandChargeExtensions.Build(), 566.28M, 696.5244M };
-        //        yield return new object[] { BroadbandChargeExtensions.WithDifferentVAT(BroadbandChargeExtensions.Build()), 946.92M, 1662.4764M };
-        //    }
-        //}
-
-        //[Theory]
-        //[MemberData("BBChargesCalculations")]
-
-        private readonly RobotMoveService _sut;
+        private readonly MarsGrid _marsGrid;
         public RobotMoveServiceTests()
         {
-            //FRRFLLFFRRFLL
-            _sut = new RobotMoveService(new List<IMoveCommand> { 
-            new MoveForwardCommand(),
-            new MoveRightCommand(),
-            new MoveRightCommand(),
-            new MoveForwardCommand(),
-            new MoveLeftCommand(),
-            new MoveLeftCommand(),
-            new MoveForwardCommand(),
-            new MoveForwardCommand(),
-            new MoveRightCommand(),
-            new MoveRightCommand(),
-            new MoveForwardCommand(),
-            new MoveLeftCommand(),
-            new MoveLeftCommand(),
-            });
-            _sut.MarsGrid = new MarsGrid(3, 5);
+            _marsGrid = new MarsGrid(3, 5);
         }
 
         [Fact]
-        public void GivenACoordinate_WhenMovingRight_ShowNewOrientation()
+        public void GivenACoordinate_WhenMoving_ShowNewOrientation()
         {
+            IEnumerable<Position> scents = null;
             var expectedPosition = new Position { Orientation = Orientation.N, PositionX = 3, PositionY = 3};
             var position = new Position { Orientation = Orientation.N, PositionX = 3, PositionY = 2 };
+            
+            List<IMoveCommand> movements = ExampleCommands();
+
+            var _sut = new RobotMoveService(movements, scents, _marsGrid);
 
             var finalPosition = _sut.GetFinalPosition(position);
 
             Assert.Equal(expectedPosition.Orientation, finalPosition.Position.Orientation);
+            Assert.Equal(expectedPosition.PositionX, finalPosition.Position.PositionX);
+            Assert.Equal(expectedPosition.PositionY, finalPosition.Position.PositionY);
         }
 
-        //[Theory]
-        //[MemberData("BBChargesCalculations")]
-        //public void ShouldCalculateBroadbandCharges(IEnumerable<BroadbandCharge> charges,
-        //    decimal totalPaid,
-        //    decimal totalPaidIncludingVAT)
-        //{
-        //    var chargesExtended = _sut.GetExtendedCharges(charges);
-        //    Assert.Equal(totals.TotalPaid, totalPaid);
-        //}
+        [Fact]
+        public void GivenARobotMove_IfIsInScentPositionPreventItToFall()
+        {
+            var scents = new List<Position> { new Position { PositionX = 2, PositionY = 4 } };
+            var currentPostion = new Position { PositionX = 2, PositionY = 3, Orientation = Orientation.N };
+            List<IMoveCommand> movements = ForwardCommands();
+
+            var _sut = new RobotMoveService(movements, scents, _marsGrid);
+
+            var result = _sut.GetFinalPosition(currentPostion);
+
+            Assert.True(!result.IsLost &&
+                result.Position.PositionX == 2 &&
+                result.Position.PositionY == 4 &&
+                result.Position.Orientation == Orientation.S);
+        }
+
+        [Fact]
+        public void GivenARobotMove_IfThereIsNOScent_RobotIsLost()
+        {
+            IEnumerable<Position> scents = null;
+            var currentPostion = new Position { PositionX = 2, PositionY = 3, Orientation = Orientation.N };
+            List<IMoveCommand> movements = ForwardCommands();
+
+            var _sut = new RobotMoveService(movements, scents, _marsGrid);
+
+            var result = _sut.GetFinalPosition(currentPostion);
+
+            Assert.True(result.IsLost &&
+                result.Position.PositionX == 2 &&
+                result.Position.PositionY == 6 &&
+                result.Position.Orientation == Orientation.N);
+        }
+
+        private static List<IMoveCommand> ForwardCommands()
+        {
+            return new List<IMoveCommand> {
+                new MoveForwardCommand(),
+                new MoveForwardCommand(),
+                new MoveForwardCommand(),
+                new MoveRightCommand(),
+                new MoveRightCommand()
+            };
+        }
+
+        private static List<IMoveCommand> ExampleCommands()
+        {
+            return new List<IMoveCommand> {
+            new MoveForwardCommand(),
+            new MoveRightCommand(),
+            new MoveRightCommand(),
+            new MoveForwardCommand(),
+            new MoveLeftCommand(),
+            new MoveLeftCommand(),
+            new MoveForwardCommand(),
+            new MoveForwardCommand(),
+            new MoveRightCommand(),
+            new MoveRightCommand(),
+            new MoveForwardCommand(),
+            new MoveLeftCommand(),
+            new MoveLeftCommand(),
+            };
+        }
+
     }
 }

@@ -6,6 +6,7 @@ namespace MartianRobotsGame.Services
     {
         IEnumerable<IMoveCommand> Convert(string positionMovesString);
     }
+
     public class MoveConverter : IMoveConverter
     {
         public IEnumerable<IMoveCommand> Convert(string positionMovesString)

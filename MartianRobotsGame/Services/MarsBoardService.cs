@@ -1,22 +1,11 @@
 ﻿using MartianRobotsGame.Models;
+using System;
 using System.Collections.Generic;
 
 namespace MartianRobotsGame.Services
 {
     public class MarsBoardService
     {
-        private readonly IMoveConverter _moveConverter;
-        public MarsGrid MarsGrid { get; set; }
-        public IEnumerable<PositionMove> PositionMoves { get; set; }
-
-        private readonly RobotMoveService _robotMoveService;
-        public IMoveConverter MoveConverter;
-        public MarsBoardService(RobotMoveService robotMoveService, IMoveConverter moveConverter)
-        {
-            _robotMoveService = robotMoveService;
-            _moveConverter = moveConverter;
-        }
-
         public MarsBoardService()
         {
         }
@@ -24,14 +13,26 @@ namespace MartianRobotsGame.Services
         public IEnumerable<FinalPosition> GetOutput(MarsGrid marsGrid, IEnumerable<PositionMove> positionMoves)
         {
             var finalPositions = new List<FinalPosition>();
-            
-            foreach (var positionMove in positionMoves)
+            var scents = new List<Position>();
+            try
             {
-                var robotMoveService = new RobotMoveService(positionMove.Movements);
-                var finalPosition = robotMoveService.GetFinalPosition(positionMove.InitialPosition);
-                finalPositions.Add(finalPosition);
+                foreach (var positionMove in positionMoves)
+                {
+                    if (!positionMove.InitialPosition.IsValid(marsGrid))
+                        throw new Exception($"Position X: {positionMove.InitialPosition.PositionX} Y: {positionMove.InitialPosition.PositionY} is invalid");
+
+                    var robotMoveService = new RobotMoveService(positionMove.Movements, scents, marsGrid);                
+                    var finalPosition = robotMoveService.GetFinalPosition(positionMove.InitialPosition);
+                    if (finalPosition.IsLost)
+                        scents.Add(finalPosition.Scent);
+                    finalPositions.Add(finalPosition);
+                }
+                return finalPositions;
             }
-            return finalPositions;
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }

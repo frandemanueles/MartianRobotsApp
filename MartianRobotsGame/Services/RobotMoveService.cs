@@ -36,11 +36,11 @@ namespace MartianRobotsGame.Services
             foreach (var movement in _movements)
             {                
                 nextPosition.Position = movement.Move(currentPositionExtended.Position);
-                if (IsInNewLostPosition(nextPosition, currentPositionExtended))
+                if (IsInNewLostPosition(currentPositionExtended, nextPosition))
                 {
-                    nextPosition.IsLost = true;
-                    nextPosition.Scent = currentPositionExtended.Position;
-                    return nextPosition;
+                    currentPositionExtended.IsLost = true;
+                    currentPositionExtended.Scent = currentPositionExtended.Position;
+                    return currentPositionExtended;
                 }
 
                 if (IsInAPreviousLostPosition(currentPositionExtended, nextPosition))
@@ -72,7 +72,7 @@ namespace MartianRobotsGame.Services
 
         private bool IsRobotOffMars(MarsGrid marsGrid, Position position)
         {
-            return (position.PositionX >= marsGrid.MaxPositionX || position.PositionY >= marsGrid.MaxPositionY);
+            return (!position.IsValid(marsGrid));
         }
     }
 }

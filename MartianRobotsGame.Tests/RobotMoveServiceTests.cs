@@ -10,7 +10,7 @@ namespace MartianRobotsGame.Tests
         private readonly MarsGrid _marsGrid;
         public RobotMoveServiceTests()
         {
-            _marsGrid = new MarsGrid(3, 5);
+            _marsGrid = new MarsGrid(5, 3);
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace MartianRobotsGame.Tests
             var expectedPosition = new Position { Orientation = Orientation.N, PositionX = 3, PositionY = 3};
             var position = new Position { Orientation = Orientation.N, PositionX = 3, PositionY = 2 };
             
-            List<IMoveCommand> movements = ExampleCommands();
+            List<IMoveCommand> movements = MoveCommand_Extensions.ExampleCommandsRobotTwo();
 
             var _sut = new RobotMoveService(movements, scents, _marsGrid);
 
@@ -34,9 +34,9 @@ namespace MartianRobotsGame.Tests
         [Fact]
         public void GivenARobotMove_IfIsInScentPositionPreventItToFall()
         {
-            var scents = new List<Position> { new Position { PositionX = 2, PositionY = 4 } };
-            var currentPostion = new Position { PositionX = 2, PositionY = 3, Orientation = Orientation.N };
-            List<IMoveCommand> movements = ForwardCommands();
+            var scents = new List<Position> { new Position { PositionX = 2, PositionY = 3 } };
+            var currentPostion = new Position { PositionX = 2, PositionY = 2, Orientation = Orientation.N };
+            List<IMoveCommand> movements = MoveCommand_Extensions.ForwardCommands();
 
             var _sut = new RobotMoveService(movements, scents, _marsGrid);
 
@@ -44,7 +44,7 @@ namespace MartianRobotsGame.Tests
 
             Assert.True(!result.IsLost &&
                 result.Position.PositionX == 2 &&
-                result.Position.PositionY == 4 &&
+                result.Position.PositionY == 3 &&
                 result.Position.Orientation == Orientation.S);
         }
 
@@ -53,7 +53,7 @@ namespace MartianRobotsGame.Tests
         {
             IEnumerable<Position> scents = null;
             var currentPostion = new Position { PositionX = 2, PositionY = 3, Orientation = Orientation.N };
-            List<IMoveCommand> movements = ForwardCommands();
+            List<IMoveCommand> movements = MoveCommand_Extensions.ForwardCommands();
 
             var _sut = new RobotMoveService(movements, scents, _marsGrid);
 
@@ -61,39 +61,8 @@ namespace MartianRobotsGame.Tests
 
             Assert.True(result.IsLost &&
                 result.Position.PositionX == 2 &&
-                result.Position.PositionY == 6 &&
+                result.Position.PositionY == 3 &&
                 result.Position.Orientation == Orientation.N);
         }
-
-        private static List<IMoveCommand> ForwardCommands()
-        {
-            return new List<IMoveCommand> {
-                new MoveForwardCommand(),
-                new MoveForwardCommand(),
-                new MoveForwardCommand(),
-                new MoveRightCommand(),
-                new MoveRightCommand()
-            };
-        }
-
-        private static List<IMoveCommand> ExampleCommands()
-        {
-            return new List<IMoveCommand> {
-            new MoveForwardCommand(),
-            new MoveRightCommand(),
-            new MoveRightCommand(),
-            new MoveForwardCommand(),
-            new MoveLeftCommand(),
-            new MoveLeftCommand(),
-            new MoveForwardCommand(),
-            new MoveForwardCommand(),
-            new MoveRightCommand(),
-            new MoveRightCommand(),
-            new MoveForwardCommand(),
-            new MoveLeftCommand(),
-            new MoveLeftCommand(),
-            };
-        }
-
     }
 }

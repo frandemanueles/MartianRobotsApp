@@ -19,7 +19,7 @@ namespace MartianRobotsGame.Services
                     position.PositionY -= 1;
                     break;
                 case Orientation.W:
-                    position.PositionY += 1;
+                    position.PositionX -= 1;
                     break;
             }
             return position;

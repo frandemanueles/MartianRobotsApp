@@ -11,10 +11,9 @@ namespace MartianRobotsGame.Models
         public bool IsValid(MarsGrid marsGrid)
         {
             return (PositionX >= 0 &&
-                PositionX < marsGrid.MaxPositionX && 
+                PositionX <= marsGrid.MaxPositionX && 
                 PositionY >= 0 && 
-                PositionY < marsGrid.MaxPositionY &&
-                Enum.IsDefined(typeof(Orientation), this.Orientation));
+                PositionY <= marsGrid.MaxPositionY);
         }
     }
 
@@ -24,10 +23,6 @@ namespace MartianRobotsGame.Models
         public Position Position { get; set; }
         public Position Scent { get; set; }
 
-        public FinalPosition()
-        {
-
-        }
         public FinalPosition(Position position)
         {
             this.Position = position;
@@ -36,7 +31,7 @@ namespace MartianRobotsGame.Models
         
         public override string ToString()
         {
-            return $"{Position.Orientation} {Position.PositionX} {Position.PositionY}  {(this.IsLost ? "LOST" : string.Empty)}";
+            return $"{Position.PositionX} {Position.PositionY} {Position.Orientation} {(this.IsLost ? "LOST" : string.Empty)}";
         }
     }
 }

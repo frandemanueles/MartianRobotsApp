@@ -9,7 +9,7 @@ namespace MartianRobotsGame.Services
     {
         private readonly IEnumerable<IMoveCommand> _movements;
         private readonly IEnumerable<Position> _scents;
-        public MarsGrid MarsGrid { get; set; }
+        private readonly MarsGrid _marsGrid;
 
         public RobotMoveService(IEnumerable<IMoveCommand> movements)
         {
@@ -22,12 +22,12 @@ namespace MartianRobotsGame.Services
         {
             _movements = movements;
             _scents = scents;
-            MarsGrid = marsGrid;
+            _marsGrid = marsGrid;
         }
 
         public FinalPosition GetFinalPosition(Position currentPosition)
         {
-            if (!currentPosition.IsValid(this.MarsGrid))
+            if (!currentPosition.IsValid(_marsGrid))
                 throw new Exception($"Position X: {currentPosition.PositionX} Y: {currentPosition.PositionY} is invalid");
             
             var currentPositionExtended = new FinalPosition(currentPosition);
@@ -48,18 +48,18 @@ namespace MartianRobotsGame.Services
                 else
                     currentPositionExtended.Position = nextPosition.Position;
             }
-            nextPosition.IsLost = IsRobotOffMars(this.MarsGrid, nextPosition.Position);
+            nextPosition.IsLost = IsRobotOffMars(_marsGrid, nextPosition.Position);
             return nextPosition;
         }
 
         private bool IsInAPreviousLostPosition(FinalPosition currentPosition, FinalPosition nextPosition)
         {
-            return IsRobotOffMars(this.MarsGrid, nextPosition.Position) && ExistsScentForPosition(currentPosition);
+            return IsRobotOffMars(_marsGrid, nextPosition.Position) && ExistsScentForPosition(currentPosition);
         }
 
         private bool IsInNewLostPosition(FinalPosition currentPosition, FinalPosition nextPosition)
         {
-            return IsRobotOffMars(this.MarsGrid, nextPosition.Position) && !ExistsScentForPosition(currentPosition);
+            return IsRobotOffMars(_marsGrid, nextPosition.Position) && !ExistsScentForPosition(currentPosition);
         }
 
         private bool ExistsScentForPosition(FinalPosition currentPositionExtended)

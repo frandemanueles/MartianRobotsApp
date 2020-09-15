@@ -62,7 +62,8 @@ namespace MartianRobotsGame
 
             var finalPositions = new MarsBoardService().GetOutput(marsGrid, positionMoves);
 
-            Console.WriteLine($"FINAL  OUTPUT:");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("FINAL OUTPUT:");
             Console.WriteLine("--------------------------------------------");
             foreach (var finalPosition in finalPositions)
             {

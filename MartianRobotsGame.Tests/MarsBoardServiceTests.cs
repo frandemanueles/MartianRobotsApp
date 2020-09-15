@@ -41,9 +41,9 @@ namespace MartianRobotsGame.Tests
 
             Assert.True(result.ToList().Count == 3);
             Assert.Collection(result,
-                                    item => Assert.Equal(1, item.Position.PositionX),
-                                    item => Assert.True(item.IsLost),
-                                    item => Assert.Equal(2, item.Position.PositionX));
+                                    item => Assert.True(item.Position.PositionX == 1 && item.Position.PositionY == 1 && item.Position.Orientation == Orientation.E),
+                                    item => Assert.True(item.IsLost && item.Scent.PositionX == 3 && item.Scent.PositionY == 3),
+                                    item => Assert.True(item.Position.PositionX == 2 && item.Position.PositionY == 3 && item.Position.Orientation == Orientation.S));
 
         }
     }

@@ -4,9 +4,8 @@ namespace MartianRobotsGame.Services
 {
     public class MoveLeftCommand : IMoveCommand
     {
-        public Position Move(Position initialPosition)
+        public Position Move(Position position)
         {
-            var position = new Position { Orientation = initialPosition.Orientation, PositionX = initialPosition.PositionX, PositionY = initialPosition.PositionY };
             switch (position.Orientation)
             {
                 case Orientation.N:
